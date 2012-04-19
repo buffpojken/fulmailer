@@ -1,4 +1,6 @@
+#coding:utf-8
 require 'sinatra'
+require 'pony'
 
 get '/' do
   "Move along..."
@@ -6,16 +8,21 @@ end
                  
 post '/send' do 
   Pony.mail({
-    :to             => "daniel@qubator.com", 
-    :via            => :smtp, 
-    :via_options    => {
-      :address      => "smtp.postmarkapp.com", 
-      :port         => "25", 
-      :user_name    => "1422b1cc-7666-4f7c-9958-34e8247189cf", 
-      :password     => "1422b1cc-7666-4f7c-9958-34e8247189cf", 
-      :authentication => :login, 
-      :domain       => ""
+    :to             => "jesper.astrom@qubator.com", 
+    :via            => :sendmail, 
+    :from           => params[:from], 
+    :subject        => "Rör inte mitt snus!", 
+    :body           => %{
+      Det finns en bred politisk enighet i Sverige om att snus ska få tillverkas, användas och exporteras inom EU.
+
+      Nu vill EU-kommissionen förbjuda det svenska snuset helt och hållet. Detta är oacceptabelt.
+
+      Vad kommer du att göra för att rädda det svenska snuset?
+
+      Med vänliga hälsningar
+
+      #{params[:first_name]} #{params[:last_name]}
     }
-  
-  })
+  })                                
+  redirect "http://rorintemittsnus.nu/"
 end
